@@ -26,6 +26,7 @@ services:
       - ./plugins:/opt/airflow/plugins
       - ./scripts:/opt/airflow/scripts
       - ~/google_credentials.json:/.google/google_credentials.json
+      - ~/.ssh/snowflake_tf_snow_key.p8:/.ssh/snowflake_tf_snow_key.p8
 
   webserver:
     build: .
