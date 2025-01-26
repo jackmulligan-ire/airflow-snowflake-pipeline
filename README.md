@@ -1,3 +1,5 @@
+# Airflow Pipeline for Snowflake and GCP
+
 A pipeline built to download a Parquet file containing taxi ride data, stage this in Google Cloud Storage, then create a table using an external stage in Snowflake.
 
 You can find the Terraform file used to deploy the Snowflake and Google Cloud Platform infra for the project in [this repo](https://github.com/jackmulligan-ire/terraform-gcs-snowflake).
