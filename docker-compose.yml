@@ -25,7 +25,7 @@ services:
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
       - ./scripts:/opt/airflow/scripts
-      - ~/google_credentials.json:/.google/credentials
+      - ~/google_credentials.json:/.google/google_credentials.json
 
   webserver:
     build: .
@@ -40,7 +40,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
-      - ~/google_credentials.json:/.google/credentials:ro
+      - ~/google_credentials.json:/.google/google_credentials.json:ro
       - ./scripts:/opt/airflow/scripts
 
     user: "${AIRFLOW_UID:-50000}:0"
