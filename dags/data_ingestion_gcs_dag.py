@@ -32,21 +32,22 @@ def create_table_from_stage():
     ctx = sc.connect(**conn_params)
     with ctx.cursor() as cs:
         cs.execute(f"""
-            CREATE TABLE "terraform_demo_448321_db"."terraform_demo_448321_schema"."YELLOW_TRIP_DATA_2024_09"
+            CREATE OR REPLACE TABLE "{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."YELLOW_TRIP_DATA_2024_09"
             USING TEMPLATE (
                 SELECT ARRAY_AGG(OBJECT_CONSTRUCT(*))
                 FROM TABLE(
                     INFER_SCHEMA(
-            LOCATION=>'@"terraform_demo_448321_db"."terraform_demo_448321_schema"."terraform_demo_448321_external_stage"/raw/{dataset_file}'
-            , FILE_FORMAT=>'"terraform_demo_448321_db"."terraform_demo_448321_schema"."terraform_demo_448321_file_format"'
+            LOCATION=>'@"{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."{os.environ.get('SNOWFLAKE_PROJECT')}_EXTERNAL_STAGE"/raw/{dataset_file}'
+            , FILE_FORMAT=>'"{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."{os.environ.get('SNOWFLAKE_PROJECT')}_FILE_FORMAT"'
+            , IGNORE_CASE=>TRUE
                     )
                 )
             );
         """)
         cs.execute(f"""
-            COPY INTO "terraform_demo_448321_db"."terraform_demo_448321_schema"."YELLOW_TRIP_DATA_2024_09"
-            FROM '@"terraform_demo_448321_db"."terraform_demo_448321_schema"."terraform_demo_448321_external_stage"/raw/yellow_tripdata_2024-09.parquet'
-            FILE_FORMAT = '"terraform_demo_448321_db"."terraform_demo_448321_schema"."terraform_demo_448321_file_format"'
+            COPY INTO "{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."YELLOW_TRIP_DATA_2024_09"
+            FROM '@"{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."{os.environ.get('SNOWFLAKE_PROJECT')}_EXTERNAL_STAGE"/raw/{dataset_file}'
+            FILE_FORMAT = '"{os.environ.get('SNOWFLAKE_DATABASE')}"."{os.environ.get('SNOWFLAKE_SCHEMA')}"."{os.environ.get('SNOWFLAKE_PROJECT')}_FILE_FORMAT"'
             MATCH_BY_COLUMN_NAME='CASE_INSENSITIVE';
         """)
 
